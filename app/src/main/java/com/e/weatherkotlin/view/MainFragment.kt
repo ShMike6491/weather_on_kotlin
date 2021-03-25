@@ -10,8 +10,10 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.e.weatherkotlin.R
 import com.e.weatherkotlin.databinding.MainFragmentBinding
+import com.e.weatherkotlin.model.WeatherModel
 import com.e.weatherkotlin.viewmodel.AppState
 import com.e.weatherkotlin.viewmodel.MainViewModel
+import com.google.android.material.snackbar.Snackbar
 
 class MainFragment : Fragment() {
 
@@ -40,7 +42,34 @@ class MainFragment : Fragment() {
     }
 
     private fun renderData(data: AppState) {
-        makeToast("test data")
+        when (data) {
+            is AppState.Success -> {
+                val weatherData = data.weatherData
+                binding.loadingLayout.visibility = View.GONE
+                setData(weatherData)
+            }
+            is AppState.Loading -> {
+                binding.loadingLayout.visibility = View.VISIBLE
+            }
+            is AppState.Error -> {
+                binding.loadingLayout.visibility = View.GONE
+                Snackbar
+                    .make(binding.mainView, getString(R.string.error), Snackbar.LENGTH_INDEFINITE)
+                    .setAction(getString(R.string.reload)) { viewModel.getDataFromCash() }
+                    .show()
+            }
+        }
+    }
+
+    private fun setData(weatherData: WeatherModel) {
+        binding.cityName.text = weatherData.city.city
+        binding.cityCoordinates.text = String.format(
+            getString(R.string.coordinates),
+            weatherData.city.lat.toString(),
+            weatherData.city.lon.toString()
+        )
+        binding.temperatureValue.text = weatherData.temperature.toString()
+        binding.feelsLikeValue.text = weatherData.feelsLike.toString()
     }
 
     override fun onDestroyView() {

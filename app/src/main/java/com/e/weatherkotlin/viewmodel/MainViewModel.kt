@@ -23,7 +23,7 @@ class MainViewModel(
     private fun getDataFromSource() {
         Thread {
             sleep(1000)
-            liveDataToObserve.postValue(AppState())
+            liveDataToObserve.postValue(AppState.Success(repositoryImpl.getDataFromCash()))
         }.start()
     }
 }
