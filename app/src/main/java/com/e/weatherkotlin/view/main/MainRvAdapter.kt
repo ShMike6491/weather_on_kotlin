@@ -9,12 +9,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.e.weatherkotlin.R
 import com.e.weatherkotlin.model.WeatherModel
 
-class MainRvAdapter : RecyclerView.Adapter<MainRvAdapter.RecViewHolder>() {
+class MainRvAdapter(private var callback: CallbackClickHandler?) : RecyclerView.Adapter<MainRvAdapter.RecViewHolder>() {
     private var dataList: List<WeatherModel> = listOf()
 
     fun setWeather(data: List<WeatherModel>) {
         dataList = data
         notifyDataSetChanged()
+    }
+
+    fun removeListener() {
+        callback = null
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecViewHolder {
@@ -38,11 +42,7 @@ class MainRvAdapter : RecyclerView.Adapter<MainRvAdapter.RecViewHolder>() {
                 .text =
                 model.city.city
             itemView.setOnClickListener {
-                Toast.makeText(
-                    itemView.context,
-                    model.city.city,
-                    Toast.LENGTH_LONG
-                ).show()
+                callback?.handleClick(model)
             }
         }
     }

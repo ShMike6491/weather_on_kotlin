@@ -6,78 +6,60 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import com.e.weatherkotlin.R
 import com.e.weatherkotlin.databinding.DetailsFragmentBinding
 import com.e.weatherkotlin.model.WeatherModel
-import com.e.weatherkotlin.viewmodel.AppState
-import com.e.weatherkotlin.viewmodel.MainViewModel
-import com.google.android.material.snackbar.Snackbar
 
 class DetailsFragment : Fragment() {
 
-//    private var _binding: DetailsFragmentBinding? = null
-//    private val binding get() = _binding!!
-//    private lateinit var viewModel: MainViewModel
-//
-//    companion object {
-//        fun newInstance() = DetailsFragment()
-//    }
-//
-//    override fun onCreateView(
-//        inflater: LayoutInflater,
-//        container: ViewGroup?,
-//        savedInstanceState: Bundle?
-//    ): View? {
-//        _binding = DetailsFragmentBinding.inflate(inflater, container, false)
-//        return binding.getRoot()
-//    }
-//
-//    override fun onActivityCreated(savedInstanceState: Bundle?) {
-//        super.onActivityCreated(savedInstanceState)
-//        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
-//        viewModel.getData().observe(viewLifecycleOwner, Observer { renderData(it) })
-//        viewModel.getDataFromCash()
-//    }
-//
-//    private fun renderData(data: AppState) {
-//        when (data) {
-//            is AppState.Success -> {
-//                val weatherData = data.weatherData
-//                binding.loadingLayout.visibility = View.GONE
-//                setData(weatherData)
-//            }
-//            is AppState.Loading -> {
-//                binding.loadingLayout.visibility = View.VISIBLE
-//            }
-//            is AppState.Error -> {
-//                binding.loadingLayout.visibility = View.GONE
-//                Snackbar
-//                    .make(binding.mainView, getString(R.string.error), Snackbar.LENGTH_INDEFINITE)
-//                    .setAction(getString(R.string.reload)) { viewModel.getDataFromCash() }
-//                    .show()
-//            }
-//        }
-//    }
-//
-//    private fun setData(weatherData: WeatherModel) {
-//        binding.cityName.text = weatherData.city.city
-//        binding.cityCoordinates.text = String.format(
-//            getString(R.string.coordinates),
-//            weatherData.city.lat.toString(),
-//            weatherData.city.lon.toString()
-//        )
-//        binding.temperatureValue.text = weatherData.temperature.toString()
-//        binding.feelsLikeValue.text = weatherData.feelsLike.toString()
-//    }
-//
-//    override fun onDestroyView() {
-//        super.onDestroyView()
-//        _binding = null
-//    }
-//
-//    private fun makeToast(msg: String) {
-//        Toast.makeText(context, msg, Toast.LENGTH_LONG).show()
-//    }
+    private var _binding: DetailsFragmentBinding? = null
+    private val binding get() = _binding!!
+
+    companion object {
+        const val BUNDLE_EXTRA = "weather"
+
+        fun newInstance(bundle: Bundle): DetailsFragment {
+            val fragment = DetailsFragment()
+            fragment.arguments = bundle
+            return fragment
+        }
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        _binding = DetailsFragmentBinding.inflate(inflater, container, false)
+        return binding.getRoot()
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val weather = arguments?.getParcelable<WeatherModel>(BUNDLE_EXTRA)
+        if (weather != null) {
+            renderView(weather)
+        }
+    }
+
+    private fun renderView(weather: WeatherModel) {
+        val city = weather.city
+        binding.cityName.text = city.city
+        binding.cityCoordinates.text = String.format(
+            getString(R.string.coordinates),
+            city.lat.toString(),
+            city.lon.toString()
+        )
+        binding.temperatureValue.text = weather.temperature.toString()
+        binding.feelsLikeValue.text = weather.feelsLike.toString()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    private fun makeToast(msg: String) {
+        Toast.makeText(context, msg, Toast.LENGTH_LONG).show()
+    }
 }

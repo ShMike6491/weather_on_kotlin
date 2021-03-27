@@ -9,6 +9,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.e.weatherkotlin.R
 import com.e.weatherkotlin.databinding.MainFragmentBinding
+import com.e.weatherkotlin.model.WeatherModel
+import com.e.weatherkotlin.view.details.DetailsFragment
 import com.e.weatherkotlin.viewmodel.AppState
 import com.e.weatherkotlin.viewmodel.MainViewModel
 import com.google.android.material.snackbar.Snackbar
@@ -19,8 +21,20 @@ class MainFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var viewModel: MainViewModel
-    private val adapter = MainRvAdapter()
     private var isRusData: Boolean = true
+    private val adapter = MainRvAdapter(object : CallbackClickHandler {
+        override fun handleClick(model: WeatherModel) {
+            val manager = activity?.supportFragmentManager
+            if (manager != null) {
+                val bundle = Bundle()
+                bundle.putParcelable(DetailsFragment.BUNDLE_EXTRA, model)
+                manager.beginTransaction()
+                    .add(R.id.container, DetailsFragment.newInstance(bundle))
+                    .addToBackStack("")
+                    .commitAllowingStateLoss()
+            }
+        }
+    })
 
     companion object {
         fun newInstance() = MainFragment()
@@ -43,7 +57,7 @@ class MainFragment : Fragment() {
     }
 
     private fun changeWeatherDataSet() {
-        if (isRusData) {
+        if (!isRusData) {
             viewModel.getDataFromCashRus()
             binding.mainFragmentFAB.setImageResource(R.drawable.ic_russia)
         } else {
@@ -76,5 +90,11 @@ class MainFragment : Fragment() {
                     .show()
             }
         }
+    }
+
+    override fun onDestroyView() {
+        adapter.removeListener()
+        super.onDestroyView()
+        _binding = null
     }
 }

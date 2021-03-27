@@ -19,7 +19,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/line_height"
-        android:layout_marginEnd="@dimen/margin_large"
+        android:layout_marginBottom="@dimen/margin_large"
         android:background="@android:color/darker_gray"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
