@@ -16,14 +16,21 @@ class MainViewModel(
         return liveDataToObserve
     }
 
-    fun getDataFromRemote() = getDataFromSource()
+//    fun getDataFromRemote() = getDataFromSource()
+//
+//    fun getDataFromCash() = getDataFromSource()
 
-    fun getDataFromCash() = getDataFromSource()
+    fun getDataFromCashRus() = getDataFromSource(true)
 
-    private fun getDataFromSource() {
+    fun getDataFromCashWorld() = getDataFromSource(false)
+
+    private fun getDataFromSource(isRussian: Boolean) {
+        liveDataToObserve.value = AppState.Loading
         Thread {
             sleep(1000)
-            liveDataToObserve.postValue(AppState.Success(repositoryImpl.getDataFromCash()))
+            liveDataToObserve.postValue(AppState.Success(if (isRussian)
+                repositoryImpl.getDataFromCashRus() else
+                repositoryImpl.getDataFromCashWorld()))
         }.start()
     }
 }
