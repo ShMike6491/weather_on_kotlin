@@ -16,10 +16,6 @@ class MainViewModel(
         return liveDataToObserve
     }
 
-//    fun getDataFromRemote() = getDataFromSource()
-//
-//    fun getDataFromCash() = getDataFromSource()
-
     fun getDataFromCashRus() = getDataFromSource(true)
 
     fun getDataFromCashWorld() = getDataFromSource(false)
