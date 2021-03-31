@@ -84,12 +84,30 @@ class MainFragment : Fragment() {
             }
             is AppState.Error -> {
                 binding.mainFragmentLoadingLayout.visibility = View.GONE
-                Snackbar
-                    .make(binding.mainFragmentFAB, getString(R.string.error), Snackbar.LENGTH_INDEFINITE)
-                    .setAction(getString(R.string.reload)) { viewModel.getDataFromCashRus() }
-                    .show()
+                binding.mainFragmentRootView.showSnackBar(
+                    getString(R.string.error),
+                    getString(R.string.reload),
+                    { viewModel.getDataFromCashRus() }
+                )
             }
         }
+    }
+
+    private fun View.showSnackBar(
+        msg: String,
+        actionMsg: String,
+        action: (View) -> Unit,
+        length: Int = Snackbar.LENGTH_INDEFINITE
+    ) {
+        Snackbar
+            .make(this, msg, length)
+            .setAction(actionMsg, action)
+            .show()
+    }
+
+    override fun onDestroy() {
+        adapter.removeListener()
+        super.onDestroy()
     }
 
     override fun onDestroyView() {
