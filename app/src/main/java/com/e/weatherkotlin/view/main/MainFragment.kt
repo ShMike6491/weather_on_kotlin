@@ -15,26 +15,14 @@ import com.e.weatherkotlin.viewmodel.AppState
 import com.e.weatherkotlin.viewmodel.MainViewModel
 import com.google.android.material.snackbar.Snackbar
 
-class MainFragment : Fragment() {
+class MainFragment : Fragment(), CallbackClickHandler {
 
     var _binding: MainFragmentBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var viewModel: MainViewModel
     private var isRusData: Boolean = true
-    private val adapter = MainRvAdapter(object : CallbackClickHandler {
-        override fun handleClick(model: WeatherModel) {
-            val manager = activity?.supportFragmentManager
-            if (manager != null) {
-                val bundle = Bundle()
-                bundle.putParcelable(DetailsFragment.BUNDLE_EXTRA, model)
-                manager.beginTransaction()
-                    .add(R.id.container, DetailsFragment.newInstance(bundle))
-                    .addToBackStack("")
-                    .commitAllowingStateLoss()
-            }
-        }
-    })
+    private val adapter = MainRvAdapter(this)
 
     companion object {
         fun newInstance() = MainFragment()
@@ -54,6 +42,18 @@ class MainFragment : Fragment() {
         binding.mainFragmentRecyclerView.adapter = adapter
         binding.mainFragmentFAB.setOnClickListener { changeWeatherDataSet() }
         setViewModel()
+    }
+
+    override fun handleClick(model: WeatherModel) {
+        val manager = activity?.supportFragmentManager
+        if (manager != null) {
+            val bundle = Bundle()
+            bundle.putParcelable(DetailsFragment.BUNDLE_EXTRA, model)
+            manager.beginTransaction()
+                .add(R.id.container, DetailsFragment.newInstance(bundle))
+                .addToBackStack("")
+                .commitAllowingStateLoss()
+        }
     }
 
     private fun changeWeatherDataSet() {
@@ -103,11 +103,6 @@ class MainFragment : Fragment() {
             .make(this, msg, length)
             .setAction(actionMsg, action)
             .show()
-    }
-
-    override fun onDestroy() {
-        adapter.removeListener()
-        super.onDestroy()
     }
 
     override fun onDestroyView() {
