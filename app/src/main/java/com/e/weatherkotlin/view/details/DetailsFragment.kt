@@ -2,6 +2,7 @@ package com.e.weatherkotlin.view.details
 
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -80,7 +81,9 @@ class DetailsFragment : Fragment(), WeatherDataReceiver {
     }
 
     override fun onFailed(throwable: Throwable) {
-        TODO("Not yet implemented")
+        Log.e("", "Error on Request", throwable)
+        throwable.printStackTrace()
+        renderView()
     }
 
     private fun makeToast(msg: String) {

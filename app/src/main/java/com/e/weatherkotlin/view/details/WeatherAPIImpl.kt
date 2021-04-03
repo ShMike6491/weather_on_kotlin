@@ -4,6 +4,7 @@ import android.os.Build
 import android.os.Handler
 import android.util.Log
 import androidx.annotation.RequiresApi
+import com.e.weatherkotlin.BuildConfig
 import com.e.weatherkotlin.model.WeatherDTO
 import com.google.gson.Gson
 import java.io.BufferedReader
@@ -17,7 +18,6 @@ import java.util.stream.Collectors
 @RequiresApi(Build.VERSION_CODES.N)
 class WeatherAPIImpl(private val receiver: WeatherDataReceiver, private val lat: Double, private val lon: Double) : WeatherAPI {
     private val uri = URL("https://api.weather.yandex.ru/v2/informers?lat=${lat}&lon=${lon}")
-    private val WEATHER_API_KEY = "e5e4f39a-d04f-4b43-87a7-11e8dbeb56f8"
     private val handler = Handler()
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -39,7 +39,7 @@ class WeatherAPIImpl(private val receiver: WeatherDataReceiver, private val lat:
                 val data: WeatherDTO = Gson().fromJson(json, WeatherDTO::class.java)
                 handler.post { receiver.onLoaded(data) }
             } catch (e: Exception) {
-                handler.post{handleError(e, "Connection Error")}
+                handler.post{ handleError(e, "Connection Error") }
             } finally {
                 httpsConnection.disconnect()
             }
@@ -50,7 +50,7 @@ class WeatherAPIImpl(private val receiver: WeatherDataReceiver, private val lat:
         connection.requestMethod = "GET"
         connection.addRequestProperty(
             "X-Yandex-API-Key",
-            WEATHER_API_KEY
+            BuildConfig.WEATHER_API_KEY
         )
         connection.readTimeout = 10000
         return BufferedReader(InputStreamReader(connection.inputStream))
