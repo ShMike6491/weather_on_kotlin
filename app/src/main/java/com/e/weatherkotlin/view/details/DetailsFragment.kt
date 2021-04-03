@@ -1,19 +1,24 @@
 package com.e.weatherkotlin.view.details
 
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import com.e.weatherkotlin.R
 import com.e.weatherkotlin.databinding.DetailsFragmentBinding
+import com.e.weatherkotlin.model.WeatherDTO
 import com.e.weatherkotlin.model.WeatherModel
 
-class DetailsFragment : Fragment() {
+class DetailsFragment : Fragment(), WeatherDataReceiver {
 
     private var _binding: DetailsFragmentBinding? = null
     private val binding get() = _binding!!
+    private lateinit var weatherBundle: WeatherModel
 
     companion object {
         const val BUNDLE_EXTRA = "weather"
@@ -34,29 +39,51 @@ class DetailsFragment : Fragment() {
         return binding.getRoot()
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val weather = arguments?.getParcelable<WeatherModel>(BUNDLE_EXTRA)
-        if (weather != null) {
-            renderView(weather)
+        weatherBundle = arguments?.getParcelable(BUNDLE_EXTRA) ?: WeatherModel()
+        displayLoadingPage()
+        val dataAPI = WeatherAPIImpl(this, weatherBundle.city.lat, weatherBundle.city.lon)
+        dataAPI.getWeather()
+    }
+
+    private fun displayLoadingPage() {
+        with(binding) {
+            mainView.visibility = View.GONE
+            loadingLayout.visibility = View.VISIBLE
         }
     }
 
-    private fun renderView(weather: WeatherModel) {
-        val city = weather.city
-        binding.cityName.text = city.city
-        binding.cityCoordinates.text = String.format(
-            getString(R.string.coordinates),
-            city.lat.toString(),
-            city.lon.toString()
-        )
-        binding.temperatureValue.text = weather.temperature.toString()
-        binding.feelsLikeValue.text = weather.feelsLike.toString()
+    private fun renderView(data: WeatherDTO = WeatherDTO(null)) {
+        with(binding) {
+            mainView.visibility = View.VISIBLE
+            loadingLayout.visibility = View.GONE
+            val city = weatherBundle.city
+            cityName.text = city.city
+            cityCoordinates.text = String.format(
+                getString(R.string.coordinates),
+                city.lat.toString(),
+                city.lon.toString()
+            )
+            temperatureValue.text = data.fact?.temp.toString()
+            feelsLikeValue.text = data.fact?.feels_like.toString()
+        }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onLoaded(weatherDTO: WeatherDTO) {
+        renderView(weatherDTO)
+    }
+
+    override fun onFailed(throwable: Throwable) {
+        Log.e("", "Error on Request", throwable)
+        throwable.printStackTrace()
+        renderView()
     }
 
     private fun makeToast(msg: String) {
