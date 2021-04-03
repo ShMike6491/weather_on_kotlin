@@ -1,4 +1,5 @@
 package com.e.weatherkotlin.view.details
 
-class WeatherAPI {
+interface WeatherAPI {
+    fun getWeather()
 }

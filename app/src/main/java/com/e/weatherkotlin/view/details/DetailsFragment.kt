@@ -1,17 +1,19 @@
 package com.e.weatherkotlin.view.details
 
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import com.e.weatherkotlin.R
 import com.e.weatherkotlin.databinding.DetailsFragmentBinding
 import com.e.weatherkotlin.model.WeatherDTO
 import com.e.weatherkotlin.model.WeatherModel
 
-class DetailsFragment : Fragment() {
+class DetailsFragment : Fragment(), WeatherDataReceiver {
 
     private var _binding: DetailsFragmentBinding? = null
     private val binding get() = _binding!!
@@ -36,12 +38,13 @@ class DetailsFragment : Fragment() {
         return binding.getRoot()
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         weatherBundle = arguments?.getParcelable(BUNDLE_EXTRA) ?: WeatherModel()
         displayLoadingPage()
-
-        renderView()
+        val dataAPI = WeatherAPIImpl(this, weatherBundle.city.lat, weatherBundle.city.lon)
+        dataAPI.getWeather()
     }
 
     private fun displayLoadingPage() {
@@ -70,6 +73,14 @@ class DetailsFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onLoaded(weatherDTO: WeatherDTO) {
+        renderView(weatherDTO)
+    }
+
+    override fun onFailed(throwable: Throwable) {
+        TODO("Not yet implemented")
     }
 
     private fun makeToast(msg: String) {
