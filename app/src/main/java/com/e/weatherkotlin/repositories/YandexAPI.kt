@@ -3,6 +3,8 @@ package com.e.weatherkotlin.repositories
 import com.e.weatherkotlin.BuildConfig
 import com.e.weatherkotlin.model.WeatherDTO
 import com.google.gson.GsonBuilder
+import okhttp3.logging.HttpLoggingInterceptor
+import okhttp3.logging.HttpLoggingInterceptor.*
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Response
@@ -25,12 +27,13 @@ class YandexAPI {
         .create(WeatherAPI::class.java)
 
     fun getCityWeather(lat: Double, lon: Double, callback: Callback<WeatherDTO>) {
-        weatherApi.getWeather(BuildConfig.WEATHER_API_KEY, lat, lon)
+        weatherApi.getWeather(BuildConfig.WEATHER_API_KEY, lat, lon).enqueue(callback)
     }
 
     private fun getClient(interceptor: Interceptor): OkHttpClient {
         val client = OkHttpClient.Builder()
         client.addInterceptor(interceptor)
+        client.addInterceptor(HttpLoggingInterceptor().setLevel(Level.BODY))
         return client.build()
     }
 

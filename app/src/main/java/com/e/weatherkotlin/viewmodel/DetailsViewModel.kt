@@ -39,7 +39,7 @@ class DetailsViewModel(
         }
 
         override fun onFailure(call: Call<WeatherDTO>, t: Throwable) {
-            liveData.value = AppState.Error(Throwable(t.message ?: REQUEST_ERROR))
+            liveData.postValue(AppState.Error(Throwable(t.message ?: REQUEST_ERROR)))
         }
 
         private fun checkResponse(res: WeatherDTO): AppState {
