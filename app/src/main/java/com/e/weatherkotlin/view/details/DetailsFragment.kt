@@ -1,5 +1,6 @@
 package com.e.weatherkotlin.view.details
 
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -15,6 +16,7 @@ import com.e.weatherkotlin.model.WeatherModel
 import com.e.weatherkotlin.utils.showSnackBar
 import com.e.weatherkotlin.viewmodel.AppState
 import com.e.weatherkotlin.viewmodel.DetailsViewModel
+import com.github.twocoffeesoneteam.glidetovectoryou.GlideToVectorYou
 
 class DetailsFragment : Fragment() {
 
@@ -78,6 +80,11 @@ class DetailsFragment : Fragment() {
                 getString(R.string.coordinates),
                 city.lat.toString(),
                 city.lon.toString()
+            )
+            GlideToVectorYou.justLoadImage(
+                activity,
+                Uri.parse("https://yastatic.net/weather/i/icons/blueye/color/svg/${data.icon}.svg"),
+                weatherIcon
             )
             temperatureValue.text = data.temperature.toString()
             feelsLikeValue.text = data.feelsLike.toString()
