@@ -1,6 +1,10 @@
-package com.e.weatherkotlin.model
+package com.e.weatherkotlin.repositories
 
-class RepositoryImp : Repository {
+import com.e.weatherkotlin.model.WeatherModel
+import com.e.weatherkotlin.model.getRussianCities
+import com.e.weatherkotlin.model.getWorldCities
+
+class MainRepImp : MainRep {
     override fun getDataFromServer(): WeatherModel {
         return WeatherModel()
     }

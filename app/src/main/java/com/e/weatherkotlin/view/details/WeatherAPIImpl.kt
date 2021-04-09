@@ -16,12 +16,12 @@ import java.lang.Exception
 import java.util.stream.Collectors
 
 @RequiresApi(Build.VERSION_CODES.N)
-class WeatherAPIImpl(private val receiver: WeatherDataReceiver, private val lat: Double, private val lon: Double) : WeatherAPI {
+class WeatherAPIImpl(private val receiver: WeatherDataReceiver, private val lat: Double, private val lon: Double) {
     private val uri = URL("https://api.weather.yandex.ru/v2/informers?lat=${lat}&lon=${lon}")
     private val handler = Handler()
 
     @RequiresApi(Build.VERSION_CODES.N)
-    override fun getWeather() {
+    fun getWeather() {
         try {
             makeAPIRequest()
         } catch (e: MalformedURLException) {
@@ -30,7 +30,7 @@ class WeatherAPIImpl(private val receiver: WeatherDataReceiver, private val lat:
     }
 
     private fun makeAPIRequest() {
-        Thread(Runnable {
+        Thread {
             lateinit var httpsConnection: HttpsURLConnection
             try {
                 httpsConnection = uri.openConnection() as HttpsURLConnection
@@ -39,11 +39,11 @@ class WeatherAPIImpl(private val receiver: WeatherDataReceiver, private val lat:
                 val data: WeatherDTO = Gson().fromJson(json, WeatherDTO::class.java)
                 handler.post { receiver.onLoaded(data) }
             } catch (e: Exception) {
-                handler.post{ handleError(e, "Connection Error") }
+                handler.post { handleError(e, "Connection Error") }
             } finally {
                 httpsConnection.disconnect()
             }
-        }).start()
+        }.start()
     }
 
     private fun setupConnection(connection: HttpsURLConnection): BufferedReader{

@@ -11,7 +11,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import com.e.weatherkotlin.R
-import com.e.weatherkotlin.view.details.MyBroadcastReceiver
 import com.e.weatherkotlin.view.main.MainFragment
 
 class MainActivity : AppCompatActivity() {

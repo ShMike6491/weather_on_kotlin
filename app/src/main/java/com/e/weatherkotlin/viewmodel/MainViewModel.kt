@@ -3,13 +3,13 @@ package com.e.weatherkotlin.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.e.weatherkotlin.model.Repository
-import com.e.weatherkotlin.model.RepositoryImp
+import com.e.weatherkotlin.repositories.MainRep
+import com.e.weatherkotlin.repositories.MainRepImp
 import java.lang.Thread.sleep
 
 class MainViewModel(
     private val liveDataToObserve: MutableLiveData<AppState> = MutableLiveData(),
-    private val repositoryImpl: Repository = RepositoryImp()
+    private val mainRepImpl: MainRep = MainRepImp()
 ) : ViewModel() {
 
     fun getData(): LiveData<AppState> {
@@ -25,8 +25,8 @@ class MainViewModel(
         Thread {
             sleep(1000)
             liveDataToObserve.postValue(AppState.Success(if (isRussian)
-                repositoryImpl.getDataFromCashRus() else
-                repositoryImpl.getDataFromCashWorld()))
+                mainRepImpl.getDataFromCashRus() else
+                mainRepImpl.getDataFromCashWorld()))
         }.start()
     }
 }

@@ -6,13 +6,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import com.e.weatherkotlin.R
 import com.e.weatherkotlin.databinding.DetailsFragmentBinding
 import com.e.weatherkotlin.model.WeatherDTO
 import com.e.weatherkotlin.model.WeatherModel
+import com.google.android.material.snackbar.Snackbar
 
 class DetailsFragment : Fragment(), WeatherDataReceiver {
 
@@ -34,9 +34,9 @@ class DetailsFragment : Fragment(), WeatherDataReceiver {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = DetailsFragmentBinding.inflate(inflater, container, false)
-        return binding.getRoot()
+        return binding.root
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -44,8 +44,10 @@ class DetailsFragment : Fragment(), WeatherDataReceiver {
         super.onViewCreated(view, savedInstanceState)
         weatherBundle = arguments?.getParcelable(BUNDLE_EXTRA) ?: WeatherModel()
         displayLoadingPage()
-        val dataAPI = WeatherAPIImpl(this, weatherBundle.city.lat, weatherBundle.city.lon)
-        dataAPI.getWeather()
+
+
+//        val dataAPI = WeatherAPIImpl(this, weatherBundle.city.lat, weatherBundle.city.lon)
+//        dataAPI.getWeather()
     }
 
     private fun displayLoadingPage() {
@@ -86,7 +88,15 @@ class DetailsFragment : Fragment(), WeatherDataReceiver {
         renderView()
     }
 
-    private fun makeToast(msg: String) {
-        Toast.makeText(context, msg, Toast.LENGTH_LONG).show()
+    private fun View.showSnackBar(
+        msg: String,
+        actionMsg: String,
+        action: (View) -> Unit,
+        length: Int = Snackbar.LENGTH_INDEFINITE
+    ) {
+        Snackbar
+            .make(this, msg, length)
+            .setAction(actionMsg, action)
+            .show()
     }
 }
