@@ -12,9 +12,9 @@ import androidx.lifecycle.ViewModelProvider
 import com.e.weatherkotlin.R
 import com.e.weatherkotlin.databinding.DetailsFragmentBinding
 import com.e.weatherkotlin.model.WeatherModel
+import com.e.weatherkotlin.utils.showSnackBar
 import com.e.weatherkotlin.viewmodel.AppState
 import com.e.weatherkotlin.viewmodel.DetailsViewModel
-import com.google.android.material.snackbar.Snackbar
 
 class DetailsFragment : Fragment() {
 
@@ -113,17 +113,5 @@ class DetailsFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    private fun View.showSnackBar(
-        msg: String,
-        actionMsg: String,
-        action: (View) -> Unit,
-        length: Int = Snackbar.LENGTH_INDEFINITE
-    ) {
-        Snackbar
-            .make(this, msg, length)
-            .setAction(actionMsg, action)
-            .show()
     }
 }
