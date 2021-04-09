@@ -3,8 +3,8 @@ package com.e.weatherkotlin.repositories
 import com.e.weatherkotlin.model.WeatherDTO
 import retrofit2.Callback
 
-class DetailRepImpl : DetailsRep {
+class DetailRepImpl(private val remoteResource: YandexAPI) : DetailsRep {
     override fun getWeather(lat: Double, lon: Double, callback: Callback<WeatherDTO>) {
-        TODO("Not yet implemented")
+        remoteResource.getCityWeather(lat,lon, callback)
     }
 }
