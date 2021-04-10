@@ -13,10 +13,10 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 class YandexAPI {
-    private val QUERY = "https://api.weather.yandex.ru/"
+    private val PATH = "https://api.weather.yandex.ru/"
 
     private val weatherApi = Retrofit.Builder()
-        .baseUrl(QUERY)
+        .baseUrl(PATH)
         .addConverterFactory(
             GsonConverterFactory.create(
                 GsonBuilder().setLenient().create()
