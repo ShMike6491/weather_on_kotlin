@@ -2,9 +2,7 @@ package com.e.weatherkotlin.view.main
 
 import android.content.Context
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -15,6 +13,7 @@ import com.e.weatherkotlin.utils.showSnackBar
 import com.e.weatherkotlin.view.CallbackClickHandler
 import com.e.weatherkotlin.view.RvAdapter
 import com.e.weatherkotlin.view.details.DetailsFragment
+import com.e.weatherkotlin.view.favorites.FavoritesFragment
 import com.e.weatherkotlin.viewmodel.AppState
 import com.e.weatherkotlin.viewmodel.MainViewModel
 
@@ -38,6 +37,7 @@ class MainFragment : Fragment(), CallbackClickHandler {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        setHasOptionsMenu(true);
         _binding = MainFragmentBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -48,6 +48,25 @@ class MainFragment : Fragment(), CallbackClickHandler {
         binding.mainFragmentFAB.setOnClickListener { changeWeatherDataSet() }
         setViewModel()
         showCitiesList()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.main_menu, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.menu_saved -> {
+                val manager = activity?.supportFragmentManager
+                    manager!!.beginTransaction()
+                    .replace(R.id.container, FavoritesFragment.newInstance())
+                    .addToBackStack("")
+                    .commitAllowingStateLoss()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     override fun handleClick(model: WeatherModel) {

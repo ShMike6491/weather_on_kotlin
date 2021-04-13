@@ -25,24 +25,6 @@ class MainActivity : AppCompatActivity() {
         registerReceiver(receiver, IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.main_menu, menu)
-        return super.onCreateOptionsMenu(menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.menu_saved -> {
-                supportFragmentManager.beginTransaction()
-                    .replace(R.id.container, FavoritesFragment.newInstance())
-                    .addToBackStack("")
-                    .commitAllowingStateLoss()
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
-    }
-
     override fun onDestroy() {
         unregisterReceiver(receiver)
         super.onDestroy()
