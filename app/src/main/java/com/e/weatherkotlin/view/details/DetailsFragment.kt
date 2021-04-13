@@ -12,6 +12,7 @@ import com.e.weatherkotlin.R
 import com.e.weatherkotlin.databinding.DetailsFragmentBinding
 import com.e.weatherkotlin.model.WeatherModel
 import com.e.weatherkotlin.utils.showSnackBar
+import com.e.weatherkotlin.utils.showToast
 import com.e.weatherkotlin.viewmodel.AppState
 import com.e.weatherkotlin.viewmodel.DetailsViewModel
 import com.github.twocoffeesoneteam.glidetovectoryou.GlideToVectorYou
@@ -33,10 +34,7 @@ class DetailsFragment : Fragment() {
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         setHasOptionsMenu(true)
         _binding = DetailsFragmentBinding.inflate(inflater, container, false)
@@ -58,7 +56,9 @@ class DetailsFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_star -> {
-                //TODO add star functionality
+                saveToFavorites()
+                item.setIcon(R.drawable.ic_star_filled)
+                showToast(requireActivity(), "City was saved")
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -115,6 +115,10 @@ class DetailsFragment : Fragment() {
                 weatherBundle.city.lon
             ) }
         )
+    }
+
+    private fun saveToFavorites() {
+        viewModel.saveCityToDB(weatherBundle.city)
     }
 
     private fun displayLoadingPage() {

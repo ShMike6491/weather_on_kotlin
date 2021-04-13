@@ -12,6 +12,8 @@ import com.e.weatherkotlin.R
 import com.e.weatherkotlin.databinding.MainFragmentBinding
 import com.e.weatherkotlin.model.WeatherModel
 import com.e.weatherkotlin.utils.showSnackBar
+import com.e.weatherkotlin.view.CallbackClickHandler
+import com.e.weatherkotlin.view.RvAdapter
 import com.e.weatherkotlin.view.details.DetailsFragment
 import com.e.weatherkotlin.viewmodel.AppState
 import com.e.weatherkotlin.viewmodel.MainViewModel
@@ -25,7 +27,7 @@ class MainFragment : Fragment(), CallbackClickHandler {
 
     private lateinit var viewModel: MainViewModel
     private var isRusData: Boolean = true
-    private val adapter = MainRvAdapter(this)
+    private val adapter = RvAdapter(this)
 
     companion object {
         fun newInstance() = MainFragment()

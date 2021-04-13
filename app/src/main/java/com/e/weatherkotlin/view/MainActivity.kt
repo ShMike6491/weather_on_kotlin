@@ -7,6 +7,8 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import com.e.weatherkotlin.R
+import com.e.weatherkotlin.view.details.DetailsFragment
+import com.e.weatherkotlin.view.favorites.FavoritesFragment
 import com.e.weatherkotlin.view.main.MainFragment
 
 class MainActivity : AppCompatActivity() {
@@ -31,7 +33,10 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_saved -> {
-                //TODO send user to favorites page
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.container, FavoritesFragment.newInstance())
+                    .addToBackStack("")
+                    .commitAllowingStateLoss()
                 true
             }
             else -> super.onOptionsItemSelected(item)
