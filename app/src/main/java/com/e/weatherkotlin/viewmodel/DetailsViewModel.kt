@@ -11,14 +11,14 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
+private const val SERVER_ERROR = "server error"
+private const val CORRUPTED_DATA = "the request data isn't valid"
+private const val REQUEST_ERROR = "request error"
+
 class DetailsViewModel(
     private val liveData: MutableLiveData<AppState> = MutableLiveData(),
     private val repository: DetailsRep = DetailRepImpl(YandexAPI())
 ): ViewModel() {
-    private val SERVER_ERROR = "server error"
-    private val CORRUPTED_DATA = "the request data isn't valid"
-    private val REQUEST_ERROR = "request error"
-
     fun getLiveData() = liveData
 
     fun getWeatherInfo(lat: Double, lon: Double) {

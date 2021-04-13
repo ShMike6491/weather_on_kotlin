@@ -12,9 +12,9 @@ import retrofit2.Callback
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class YandexAPI {
-    private val PATH = "https://api.weather.yandex.ru/"
+private const val PATH = "https://api.weather.yandex.ru/"
 
+class YandexAPI {
     private val weatherApi = Retrofit.Builder()
         .baseUrl(PATH)
         .addConverterFactory(

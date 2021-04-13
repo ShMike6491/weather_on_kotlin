@@ -13,10 +13,9 @@ import android.widget.Toast
 import com.e.weatherkotlin.R
 import com.e.weatherkotlin.view.main.MainFragment
 
+private const val MY_ACTION_BROADCAST = "com.e.weatherkotlin.BROADCAST_ACTION"
+
 class MainActivity : AppCompatActivity() {
-
-    private val MY_ACTION_BROADCAST = "com.e.weatherkotlin.BROADCAST_ACTION"
-
     private val receiver: MyBroadcastReceiver = MyBroadcastReceiver()
     private val testReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
