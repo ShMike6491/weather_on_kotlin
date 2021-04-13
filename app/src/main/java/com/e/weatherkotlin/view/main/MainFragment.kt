@@ -15,7 +15,6 @@ import com.e.weatherkotlin.utils.showSnackBar
 import com.e.weatherkotlin.view.details.DetailsFragment
 import com.e.weatherkotlin.viewmodel.AppState
 import com.e.weatherkotlin.viewmodel.MainViewModel
-import com.google.android.material.snackbar.Snackbar
 
 private const val LIST_OF_CITIES = "com.e.weatherkotlin.view.main.CITIES_LIST"
 
