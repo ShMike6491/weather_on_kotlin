@@ -1,5 +1,6 @@
 package com.e.weatherkotlin.view.main
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,10 +11,13 @@ import androidx.lifecycle.ViewModelProvider
 import com.e.weatherkotlin.R
 import com.e.weatherkotlin.databinding.MainFragmentBinding
 import com.e.weatherkotlin.model.WeatherModel
+import com.e.weatherkotlin.utils.showSnackBar
 import com.e.weatherkotlin.view.details.DetailsFragment
 import com.e.weatherkotlin.viewmodel.AppState
 import com.e.weatherkotlin.viewmodel.MainViewModel
 import com.google.android.material.snackbar.Snackbar
+
+private const val LIST_OF_CITIES = "com.e.weatherkotlin.view.main.CITIES_LIST"
 
 class MainFragment : Fragment(), CallbackClickHandler {
 
@@ -42,6 +46,7 @@ class MainFragment : Fragment(), CallbackClickHandler {
         binding.mainFragmentRecyclerView.adapter = adapter
         binding.mainFragmentFAB.setOnClickListener { changeWeatherDataSet() }
         setViewModel()
+        showCitiesList()
     }
 
     override fun handleClick(model: WeatherModel) {
@@ -65,12 +70,33 @@ class MainFragment : Fragment(), CallbackClickHandler {
             binding.mainFragmentFAB.setImageResource(R.drawable.ic_earth)
         }
         isRusData = !isRusData
+
+        saveCitiesList()
+    }
+
+    private fun saveCitiesList() {
+        activity?.let {
+            with(it.getPreferences(Context.MODE_PRIVATE).edit()) {
+                putBoolean(LIST_OF_CITIES, !isRusData)
+                apply()
+            }
+        }
     }
 
     private fun setViewModel() {
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
         viewModel.getData().observe(viewLifecycleOwner, Observer { renderData(it) })
         viewModel.getDataFromCashRus()
+    }
+
+    private fun showCitiesList() {
+        activity?.let {
+            if (it.getPreferences(Context.MODE_PRIVATE).getBoolean(LIST_OF_CITIES, false)) {
+                changeWeatherDataSet()
+            } else {
+                viewModel.getDataFromCashRus()
+            }
+        }
     }
 
     private fun renderData(state: AppState?) {
@@ -91,18 +117,6 @@ class MainFragment : Fragment(), CallbackClickHandler {
                 )
             }
         }
-    }
-
-    private fun View.showSnackBar(
-        msg: String,
-        actionMsg: String,
-        action: (View) -> Unit,
-        length: Int = Snackbar.LENGTH_INDEFINITE
-    ) {
-        Snackbar
-            .make(this, msg, length)
-            .setAction(actionMsg, action)
-            .show()
     }
 
     override fun onDestroyView() {
