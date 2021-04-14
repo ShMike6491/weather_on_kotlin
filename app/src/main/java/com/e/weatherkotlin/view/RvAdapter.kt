@@ -1,15 +1,14 @@
-package com.e.weatherkotlin.view.main
+package com.e.weatherkotlin.view
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.e.weatherkotlin.R
 import com.e.weatherkotlin.model.WeatherModel
 
-class MainRvAdapter(private var callback: CallbackClickHandler?) : RecyclerView.Adapter<MainRvAdapter.RecViewHolder>() {
+class RvAdapter(private var callback: CallbackClickHandler?) : RecyclerView.Adapter<RvAdapter.RecViewHolder>() {
     private var dataList: List<WeatherModel> = listOf()
 
     fun setWeather(data: List<WeatherModel>) {

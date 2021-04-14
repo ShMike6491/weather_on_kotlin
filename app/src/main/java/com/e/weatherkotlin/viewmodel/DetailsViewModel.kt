@@ -2,28 +2,42 @@ package com.e.weatherkotlin.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.e.weatherkotlin.App
+import com.e.weatherkotlin.model.CityModel
 import com.e.weatherkotlin.model.WeatherDTO
-import com.e.weatherkotlin.repositories.DetailRepImpl
-import com.e.weatherkotlin.repositories.DetailsRep
-import com.e.weatherkotlin.repositories.YandexAPI
+import com.e.weatherkotlin.model.WeatherModel
+import com.e.weatherkotlin.repositories.*
 import com.e.weatherkotlin.utils.convertDtoToModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
+private const val SERVER_ERROR = "server error"
+private const val CORRUPTED_DATA = "the request data isn't valid"
+private const val REQUEST_ERROR = "request error"
+
 class DetailsViewModel(
     private val liveData: MutableLiveData<AppState> = MutableLiveData(),
-    private val repository: DetailsRep = DetailRepImpl(YandexAPI())
+    private val repository: DetailsRep = DetailRepImpl(YandexAPI()),
+    private val favoritesRepository: CacheRep = CacheRepImpl(App.favorites_dao)
 ): ViewModel() {
-    private val SERVER_ERROR = "server error"
-    private val CORRUPTED_DATA = "the request data isn't valid"
-    private val REQUEST_ERROR = "request error"
-
     fun getLiveData() = liveData
 
     fun getWeatherInfo(lat: Double, lon: Double) {
         liveData.value = AppState.Loading
         repository.getWeather(lat, lon, callback)
+    }
+
+    fun saveCityToDB(model: CityModel) {
+        favoritesRepository.saveToFavorites(model)
+    }
+
+    fun removeCityFromDB(model: CityModel) {
+        favoritesRepository.deleteFromFavorites(model)
+    }
+
+    fun contains(model: CityModel): Boolean {
+        return favoritesRepository.contains(model)
     }
 
     private val callback = object : Callback<WeatherDTO> {

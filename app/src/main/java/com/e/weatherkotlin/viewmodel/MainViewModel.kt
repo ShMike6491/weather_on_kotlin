@@ -4,12 +4,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.e.weatherkotlin.repositories.MainRep
-import com.e.weatherkotlin.repositories.MainRepImp
+import com.e.weatherkotlin.repositories.MainRepImpl
 import java.lang.Thread.sleep
 
 class MainViewModel(
     private val liveDataToObserve: MutableLiveData<AppState> = MutableLiveData(),
-    private val mainRepImpl: MainRep = MainRepImp()
+    private val mainRepImpl: MainRep = MainRepImpl()
 ) : ViewModel() {
 
     fun getData(): LiveData<AppState> {

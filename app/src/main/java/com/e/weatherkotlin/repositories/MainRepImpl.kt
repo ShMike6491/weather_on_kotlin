@@ -4,7 +4,7 @@ import com.e.weatherkotlin.model.WeatherModel
 import com.e.weatherkotlin.model.getRussianCities
 import com.e.weatherkotlin.model.getWorldCities
 
-class MainRepImp : MainRep {
+class MainRepImpl : MainRep {
     override fun getDataFromServer(): WeatherModel {
         return WeatherModel()
     }

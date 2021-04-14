@@ -1,4 +1,4 @@
-package com.e.weatherkotlin.view.main
+package com.e.weatherkotlin.view
 
 import com.e.weatherkotlin.model.WeatherModel
 
