@@ -5,7 +5,6 @@ import android.os.Build
 import android.os.Bundle
 import android.view.*
 import androidx.annotation.RequiresApi
-import androidx.appcompat.view.menu.MenuView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -36,7 +35,8 @@ class DetailsFragment : Fragment() {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         setHasOptionsMenu(true)
         _binding = DetailsFragmentBinding.inflate(inflater, container, false)
@@ -48,19 +48,22 @@ class DetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         weatherBundle = arguments?.getParcelable(BUNDLE_EXTRA) ?: WeatherModel()
         setViewModel()
+        isSaved = viewModel.contains(weatherBundle.city)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_details, menu)
+        menu.getItem(0).isVisible = false
+        val item = menu.getItem(1)
+        renderMenu(item)
         super.onCreateOptionsMenu(menu, inflater)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_star -> {
-                saveToFavorites()
-                item.setIcon(R.drawable.ic_star_filled)
-                showToast(requireActivity(), "City was saved")
+                handleSaveDeleteFunc()
+                renderMenu(item)
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -71,15 +74,13 @@ class DetailsFragment : Fragment() {
         viewModel = ViewModelProvider(this).get(DetailsViewModel::class.java)
         viewModel.getLiveData().observe(viewLifecycleOwner, Observer { renderData(it) })
         viewModel.getWeatherInfo(weatherBundle.city.lat, weatherBundle.city.lon)
-        isSaved = viewModel.contains(weatherBundle.city)
-        renderMenu()
     }
 
-    private fun renderMenu() {
+    private fun renderMenu(item: MenuItem) {
         if (isSaved) {
-
+            item.setIcon(R.drawable.ic_star_filled)
         } else {
-
+            item.setIcon(R.drawable.ic_star_empty)
         }
     }
 
@@ -122,15 +123,32 @@ class DetailsFragment : Fragment() {
         binding.mainView.showSnackBar(
             getString(R.string.error),
             getString(R.string.reload),
-            { viewModel.getWeatherInfo(
-                weatherBundle.city.lat,
-                weatherBundle.city.lon
-            ) }
+            {
+                viewModel.getWeatherInfo(
+                    weatherBundle.city.lat,
+                    weatherBundle.city.lon
+                )
+            }
         )
     }
 
-    private fun saveToFavorites() {
+    private fun handleSaveDeleteFunc() {
+        if (isSaved) {
+            removeFromFavs()
+            showToast(requireActivity(), "City has been removed")
+        } else {
+            saveToFavs()
+            showToast(requireActivity(), "City has been saved")
+        }
+        isSaved = !isSaved
+    }
+
+    private fun saveToFavs() {
         viewModel.saveCityToDB(weatherBundle.city)
+    }
+
+    private fun removeFromFavs() {
+        viewModel.removeCityFromDB(weatherBundle.city)
     }
 
     private fun displayLoadingPage() {

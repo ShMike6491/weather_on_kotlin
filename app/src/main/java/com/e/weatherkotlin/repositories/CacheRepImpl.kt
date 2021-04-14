@@ -18,4 +18,8 @@ class CacheRepImpl (private val localSource: FavoritesDAO) : CacheRep {
         val entireList = localSource.all()
         return entireList.contains(model)
     }
+
+    override fun deleteFromFavorites(model: CityModel) {
+        localSource.delete(model)
+    }
 }

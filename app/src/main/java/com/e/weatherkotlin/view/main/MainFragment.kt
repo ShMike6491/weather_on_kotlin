@@ -58,12 +58,11 @@ class MainFragment : Fragment(), CallbackClickHandler {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_saved -> {
-                val manager = activity?.supportFragmentManager
-                manager
+                activity?.supportFragmentManager
                     ?.beginTransaction()
                     ?.add(R.id.container, FavoritesFragment.newInstance())
                     ?.addToBackStack("")
-                    ?.commit()
+                    ?.commitAllowingStateLoss()
                 true
             }
             else -> super.onOptionsItemSelected(item)

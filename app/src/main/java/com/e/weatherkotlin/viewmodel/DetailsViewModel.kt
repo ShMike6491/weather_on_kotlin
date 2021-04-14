@@ -32,6 +32,10 @@ class DetailsViewModel(
         favoritesRepository.saveToFavorites(model)
     }
 
+    fun removeCityFromDB(model: CityModel) {
+        favoritesRepository.deleteFromFavorites(model)
+    }
+
     fun contains(model: CityModel): Boolean {
         return favoritesRepository.contains(model)
     }
