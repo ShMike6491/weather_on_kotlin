@@ -5,6 +5,7 @@ import android.os.Build
 import android.os.Bundle
 import android.view.*
 import androidx.annotation.RequiresApi
+import androidx.appcompat.view.menu.MenuView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -23,6 +24,7 @@ class DetailsFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var weatherBundle: WeatherModel
     private lateinit var viewModel: DetailsViewModel
+    private var isSaved = false
 
     companion object {
         const val BUNDLE_EXTRA = "weather"
@@ -69,6 +71,16 @@ class DetailsFragment : Fragment() {
         viewModel = ViewModelProvider(this).get(DetailsViewModel::class.java)
         viewModel.getLiveData().observe(viewLifecycleOwner, Observer { renderData(it) })
         viewModel.getWeatherInfo(weatherBundle.city.lat, weatherBundle.city.lon)
+        isSaved = viewModel.contains(weatherBundle.city)
+        renderMenu()
+    }
+
+    private fun renderMenu() {
+        if (isSaved) {
+
+        } else {
+
+        }
     }
 
     private fun renderData(it: AppState) {

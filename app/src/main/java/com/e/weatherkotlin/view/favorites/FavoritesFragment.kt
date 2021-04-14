@@ -28,7 +28,7 @@ class FavoritesFragment : Fragment(R.layout.favorites_fragment), CallbackClickHa
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FavoritesFragmentBinding.inflate(inflater, container, false)
         return binding.root
     }

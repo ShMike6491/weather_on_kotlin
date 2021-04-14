@@ -32,6 +32,10 @@ class DetailsViewModel(
         favoritesRepository.saveToFavorites(model)
     }
 
+    fun contains(model: CityModel): Boolean {
+        return favoritesRepository.contains(model)
+    }
+
     private val callback = object : Callback<WeatherDTO> {
         override fun onResponse(call: Call<WeatherDTO>, response: Response<WeatherDTO>) {
             val res: WeatherDTO? = response.body()

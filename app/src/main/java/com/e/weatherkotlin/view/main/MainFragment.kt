@@ -36,8 +36,8 @@ class MainFragment : Fragment(), CallbackClickHandler {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        setHasOptionsMenu(true);
+    ): View {
+        setHasOptionsMenu(true)
         _binding = MainFragmentBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -59,10 +59,11 @@ class MainFragment : Fragment(), CallbackClickHandler {
         return when (item.itemId) {
             R.id.menu_saved -> {
                 val manager = activity?.supportFragmentManager
-                    manager!!.beginTransaction()
-                    .replace(R.id.container, FavoritesFragment.newInstance())
-                    .addToBackStack("")
-                    .commitAllowingStateLoss()
+                manager
+                    ?.beginTransaction()
+                    ?.add(R.id.container, FavoritesFragment.newInstance())
+                    ?.addToBackStack("")
+                    ?.commit()
                 true
             }
             else -> super.onOptionsItemSelected(item)

@@ -13,4 +13,9 @@ class CacheRepImpl (private val localSource: FavoritesDAO) : CacheRep {
     override fun saveToFavorites(model: CityModel) {
         localSource.insert(model)
     }
+
+    override fun contains(model: CityModel): Boolean {
+        val entireList = localSource.all()
+        return entireList.contains(model)
+    }
 }
