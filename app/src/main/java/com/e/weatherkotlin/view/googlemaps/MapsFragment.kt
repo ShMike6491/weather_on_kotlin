@@ -95,7 +95,7 @@ class MapsFragment : Fragment() {
         when (requestCode) {
             REQUEST_CODE -> {
                 var grantedPermissions = 0
-                if ((grantResults.isNotEmpty())) {
+                if (grantResults.isNotEmpty()) {
                     for (i in grantResults) {
                         if (i == PackageManager.PERMISSION_GRANTED) {
                             grantedPermissions++
