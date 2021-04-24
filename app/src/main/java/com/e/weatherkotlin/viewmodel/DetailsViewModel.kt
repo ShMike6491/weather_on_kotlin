@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import com.e.weatherkotlin.App
 import com.e.weatherkotlin.model.CityModel
 import com.e.weatherkotlin.model.WeatherDTO
-import com.e.weatherkotlin.model.WeatherModel
 import com.e.weatherkotlin.repositories.*
 import com.e.weatherkotlin.utils.convertDtoToModel
 import retrofit2.Call
@@ -20,7 +19,7 @@ class DetailsViewModel(
     private val liveData: MutableLiveData<AppState> = MutableLiveData(),
     private val repository: DetailsRep = DetailRepImpl(YandexAPI()),
     private val favoritesRepository: CacheRep = CacheRepImpl(App.favorites_dao)
-): ViewModel() {
+) : ViewModel() {
     fun getLiveData() = liveData
 
     fun getWeatherInfo(lat: Double, lon: Double) {

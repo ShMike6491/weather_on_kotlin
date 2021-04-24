@@ -14,6 +14,7 @@ import com.e.weatherkotlin.view.CallbackClickHandler
 import com.e.weatherkotlin.view.RvAdapter
 import com.e.weatherkotlin.view.details.DetailsFragment
 import com.e.weatherkotlin.view.favorites.FavoritesFragment
+import com.e.weatherkotlin.view.googlemaps.MapsFragment
 import com.e.weatherkotlin.viewmodel.AppState
 import com.e.weatherkotlin.viewmodel.MainViewModel
 
@@ -46,6 +47,7 @@ class MainFragment : Fragment(), CallbackClickHandler {
         super.onViewCreated(view, savedInstanceState)
         binding.mainFragmentRecyclerView.adapter = adapter
         binding.mainFragmentFAB.setOnClickListener { changeWeatherDataSet() }
+        binding.mainFragmentFABLocation.setOnClickListener { goToMapFragment() }
         setViewModel()
         showCitiesList()
     }
@@ -67,6 +69,14 @@ class MainFragment : Fragment(), CallbackClickHandler {
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    private fun goToMapFragment() {
+        activity?.supportFragmentManager
+            ?.beginTransaction()
+            ?.add(R.id.container, MapsFragment())
+            ?.addToBackStack("")
+            ?.commitAllowingStateLoss()
     }
 
     override fun handleClick(model: WeatherModel) {
