@@ -13,3 +13,5 @@ apikey.properties
 /captures
 .externalNativeBuild
 .cxx
+/app/keystore.jks
+keystore.properties
