@@ -1,4 +1,4 @@
-package com.e.weatherkotlin.view.details
+package com.e.weatherkotlin.view
 
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -12,7 +12,7 @@ class MyBroadcastReceiver : BroadcastReceiver() {
         val noConnectivity = intent!!.getBooleanExtra(
             ConnectivityManager.EXTRA_NO_CONNECTIVITY, false
         )
-        var msg = if(noConnectivity) "Disconnected" else "Connected"
+        val msg = if(noConnectivity) "Disconnected" else "Connected"
         Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
     }
 }
