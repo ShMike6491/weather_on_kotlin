@@ -1,3 +1,8 @@
 <resources>
-    <string name="app_name">Weather Kotlin</string>
+    <string name="app_name">Weather App on Kotlin</string>
+    <string name="temperature_label">Temperature</string>
+    <string name="feels_like_label">What it feels like:</string>
+    <string name="coordinates">lt/ln: %s, %s"</string>
+    <string name="error">Error</string>
+    <string name="reload">Reload</string>
 </resources>
